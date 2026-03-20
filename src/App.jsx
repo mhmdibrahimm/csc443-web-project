@@ -1,11 +1,15 @@
-import "./App.css";
+import { BrowserRouter } from "react-router-dom";
+import AppRouter from "./router/AppRouter";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   return (
-    <>
-    <h1>Hello World</h1>
-    </>
-  )
+    <ThemeProvider>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <AppRouter />
+        </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App;
