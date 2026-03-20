@@ -22,3 +22,33 @@ select,
 textarea {
   font: inherit;
 }
+
+/* Credits to the generation tool https://cssgradient.io/ for the gradients */
+body {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  color: #0f172a;
+  background-image:
+    radial-gradient(circle at top left, #6366f11f, transparent 28%),
+    radial-gradient(circle at bottom right, #10b9811a, transparent 24%);
+}
+
+.dark body {
+  background-color: rgb(2 6 23);
+  color: rgb(248 250 252);
+  background-image:
+    radial-gradient(circle at top left, #6366f12e, transparent 24%),
+    radial-gradient(circle at bottom right, #10b9811f, transparent 20%);
+}
+
+
+
+::selection {
+  background-color: #c7d2fe;
+  color: rgb(15 23 42);
+}
+
+.dark ::selection {
+  background-color: #4f46e566;
+  color: rgb(255 255 255);
+}
