@@ -1,18 +1,55 @@
-# React + Vite
+# Velo
+Velo is a responsive frontend web application developed for CSC443 Phase I. It allows users to register, log in, browse exercises, log workouts, view workout details, and track fitness progress using mock data and local React state (Phase I only).
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Team
+- [Mohammad Ibrahim](mailto:mohammad.ibrahim07@lau.edu) (Lead)
+- [Batoul Zeineddine](mailto:batoul.zeineddine@lau.edu)
+- [Mahdi Yassine](mailto:mahdi.yassine01@lau.edu)
+- [Khalil Hassan](mailto:khalil.hassan@lau.edu)
 
-Currently, two official plugins are available:
+## Topic
+Personal Fitness Tracker
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Primary Data Entities
+- User
+- Workout
+- Exercise
+- Progress Record
+- 
+## Tech Stack
+- React
+- React Router
+- Tailwind CSS
+- JavaScript (ES6+)
+- Vite
+- Git & GitHub
 
+## Pages
+- Homepage
+- Login
+- Register
+- Workout Dashboard
+- Exercise Library
+- Workout Details
+- Log New Workout
+- User Progress
+
+## Deployed Application
+- https://mhmdibrahimm.github.io/csc443-web-project/
+
+- tutorial credits to [this repo](https://github.com/gitname/react-gh-pages)
+
+## GitHub Repository
+https://github.com/mhmdibrahimm/csc443-web-project/
+
+## Local Setup
+```bash
+npm install
+npm run dev
+```
 ## React Compiler
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+The React Compiler is enabled on this project. See [this documentation](https://react.dev/learn/react-compiler) for more information.
 
 Note: This will impact Vite dev & build performances.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
