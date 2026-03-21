@@ -42,6 +42,10 @@ export default function AppRouter() {
         <Route path="/register" element={<Register />} />
       </Route>
 
+      <Route element={<AppLayout />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Route>
+
       <Route path="/home" element={<Navigate replace to="/" />} />
       <Route path="*" element={<NotFoundPage />} />
 
