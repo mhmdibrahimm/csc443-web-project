@@ -9,6 +9,12 @@ export default function Footer() {
             Velo
           </p>
         </div>
+
+        <div className="flex flex-wrap items-center gap-4 text-slate-500 dark:text-slate-400">
+          <Link to="/dashboard" className="transition hover:text-indigo-600 dark:hover:text-indigo-300">
+            Dashboard
+          </Link>
+        </div>
       </div>
     </footer>
   );
