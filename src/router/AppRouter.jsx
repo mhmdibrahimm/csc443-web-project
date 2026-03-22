@@ -44,11 +44,15 @@ export default function AppRouter() {
 
       <Route element={<AppLayout />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/exercises" element={<ExerciseLibrary />} />
+        <Route path="/exercises/:id" element={<ExerciseDetails />} />
+        <Route path="/workouts/new" element={<LogWorkout />} />
+        <Route path="/workouts/:id" element={<WorkoutDetails />} />
+        <Route path="/progress" element={<UserProgress />} />
       </Route>
 
       <Route path="/home" element={<Navigate replace to="/" />} />
       <Route path="*" element={<NotFoundPage />} />
-
     </Routes>
   );
 }

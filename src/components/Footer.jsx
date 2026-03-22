@@ -14,6 +14,12 @@ export default function Footer() {
           <Link to="/dashboard" className="transition hover:text-indigo-600 dark:hover:text-indigo-300">
             Dashboard
           </Link>
+          <Link to="/exercises" className="transition hover:text-indigo-600 dark:hover:text-indigo-300">
+            Exercises
+          </Link>
+          <Link to="/workouts/new" className="transition hover:text-indigo-600 dark:hover:text-indigo-300">
+            Log Workout
+          </Link>
         </div>
       </div>
     </footer>
