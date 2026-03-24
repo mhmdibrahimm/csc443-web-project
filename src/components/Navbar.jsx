@@ -22,14 +22,13 @@ function getNavLinkClasses({ isActive }) {
 export default function Navbar() {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isLoginPage = location.pathname === "/login";
+  const isRegisterPage = location.pathname === "/register";
 
   // TODO: implement login/register
-  const authAction =
-    location.pathname === "/login"
-      ? { to: "/register", label: "Create account" }
-      : location.pathname === "/register"
-        ? { to: "/login", label: "Login" }
-        : { to: "/register", label: "Get started" };
+  const authAction = isLoginPage
+    ? { to: "/register", label: "Create account" }
+    : { to: "/register", label: "Get started" };
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-950/85">
@@ -54,18 +53,22 @@ export default function Navbar() {
 
         <div className="hidden items-center gap-2 md:flex">
           <ThemeToggle />
-          <Link
-            to="/login"
-            className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
-          >
-            Login
-          </Link>
-          <Link
-            to={authAction.to}
-            className="rounded-full bg-gradient-to-r from-indigo-700 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
-          >
-            {authAction.label}
-          </Link>
+          {!isRegisterPage && (
+            <Link
+              to="/login"
+              className="rounded-full px-4 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+            >
+              Login
+            </Link>
+          )}
+          {!isRegisterPage && (
+            <Link
+              to={authAction.to}
+              className="rounded-full bg-gradient-to-r from-indigo-700 to-indigo-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+            >
+              {authAction.label}
+            </Link>
+          )}
         </div>
 
         <div className="flex items-center gap-2 md:hidden">
@@ -126,20 +129,24 @@ export default function Navbar() {
           </nav>
 
           <div className="mt-4 grid gap-2">
-            <Link
-              to="/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-            >
-              Login
-            </Link>
-            <Link
-              to={authAction.to}
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
-            >
-              {authAction.label}
-            </Link>
+            {!isRegisterPage && (
+              <Link
+                to="/login"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-2xl bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+              >
+                Login
+              </Link>
+            )}
+            {!isRegisterPage && (
+              <Link
+                to={authAction.to}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-4 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+              >
+                {authAction.label}
+              </Link>
+            )}
           </div>
         </div>
       )}
