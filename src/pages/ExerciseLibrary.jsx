@@ -81,15 +81,23 @@ export default function ExerciseLibrary() {
 
         <div className="mt-6 grid gap-6 lg:grid-cols-2">
           <div>
-            <p className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+            <p
+              id="exercise-category-filter-label"
+              className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-200"
+            >
               Category
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div
+              role="group"
+              aria-labelledby="exercise-category-filter-label"
+              className="flex flex-wrap gap-2"
+            >
               {categoryFilters.map((filter) => (
                 <button
                   key={filter}
                   type="button"
                   onClick={() => setCategoryFilter(filter)}
+                  aria-pressed={categoryFilter === filter}
                   className={getButtonClasses(categoryFilter === filter)}
                 >
                   {filter}
@@ -99,15 +107,23 @@ export default function ExerciseLibrary() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-200">
+            <p
+              id="exercise-difficulty-filter-label"
+              className="mb-3 text-sm font-semibold text-slate-700 dark:text-slate-200"
+            >
               Difficulty
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div
+              role="group"
+              aria-labelledby="exercise-difficulty-filter-label"
+              className="flex flex-wrap gap-2"
+            >
               {difficultyFilters.map((filter) => (
                 <button
                   key={filter}
                   type="button"
                   onClick={() => setDifficultyFilter(filter)}
+                  aria-pressed={difficultyFilter === filter}
                   className={getButtonClasses(difficultyFilter === filter)}
                 >
                   {filter}

@@ -230,6 +230,7 @@ export default function AppLayout() {
                 </div>
                 <button
                   type="button"
+                  aria-label="Close mobile app menu"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-indigo-500 dark:hover:text-indigo-300"
                 >

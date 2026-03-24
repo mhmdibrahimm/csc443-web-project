@@ -2,8 +2,14 @@ import { Link } from "react-router-dom";
 
 export default function BrandMark() {
   return (
-    <Link to="/" className="flex items-center gap-3">
+    <Link
+      to="/"
+      aria-label="Personal Fitness Tracker home"
+      className="flex items-center gap-3"
+    >
       <svg
+        aria-hidden="true"
+        focusable="false"
         width="75"
         height="17"
         viewBox="0 0 75 17"

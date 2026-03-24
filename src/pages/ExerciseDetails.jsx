@@ -7,6 +7,7 @@ export default function ExerciseDetails() {
   const { id } = useParams();
   const { exercises, findExerciseById } = useAppData();
   const [showInstructions, setShowInstructions] = useState(true);
+  const instructionsSectionId = "exercise-instructions-panel";
 
   const exercise = findExerciseById(id);
   const relatedExercises = exercises
@@ -52,6 +53,8 @@ export default function ExerciseDetails() {
             <button
               type="button"
               onClick={() => setShowInstructions((current) => !current)}
+              aria-controls={instructionsSectionId}
+              aria-expanded={showInstructions}
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300"
             >
               {showInstructions ? "Hide steps" : "Show steps"}
@@ -123,6 +126,9 @@ export default function ExerciseDetails() {
                 <button
                   type="button"
                   onClick={() => setShowInstructions((current) => !current)}
+                  aria-controls={instructionsSectionId}
+                  aria-expanded={showInstructions}
+                  aria-label={showInstructions ? "Hide movement steps" : "Show movement steps"}
                   className="text-sm font-semibold text-indigo-700 transition hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-200"
                 >
                   {showInstructions ? "Hide" : "Show"}
@@ -130,7 +136,10 @@ export default function ExerciseDetails() {
               </div>
 
               {showInstructions ? (
-                <ol className="mt-4 space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
+                <ol
+                  id={instructionsSectionId}
+                  className="mt-4 space-y-3 text-sm leading-7 text-slate-600 dark:text-slate-300"
+                >
                   {exercise.instructions.map((instruction, index) => (
                     <li
                       key={instruction}
@@ -144,7 +153,10 @@ export default function ExerciseDetails() {
                   ))}
                 </ol>
               ) : (
-                <div className="mt-4 rounded-[22px] bg-slate-50 px-4 py-5 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                <div
+                  id={instructionsSectionId}
+                  className="mt-4 rounded-[22px] bg-slate-50 px-4 py-5 text-sm text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                >
                   Detailed movement instructions are hidden. Use the toggle to
                   reveal them again.
                 </div>

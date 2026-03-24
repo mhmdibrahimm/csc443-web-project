@@ -113,7 +113,7 @@ export default function HomePage() {
             <div className="rounded-[28px] bg-slate-50 p-5 dark:bg-slate-800">
               <img
                 src={heroImage}
-                alt="interface preview"
+                alt="Preview of the Personal Fitness Tracker dashboard and workout tracking interface"
                 className="mx-auto max-h-72 object-contain"
               />
             </div>

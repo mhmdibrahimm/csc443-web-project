@@ -47,6 +47,9 @@ export default function LogWorkout() {
     exerciseIds: [],
   });
   const [errors, setErrors] = useState({});
+  const exerciseSelectionDescriptionId = errors.exerciseIds
+    ? "workout-exercises-error"
+    : "workout-exercises-help";
 
   const selectedExercises = useMemo(
     () =>
@@ -248,56 +251,71 @@ export default function LogWorkout() {
           </div>
 
           <div className="mt-8">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <h2 className="font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
-                  Select exercises
-                </h2>
-                <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-                  Choose at least one movement to include in the session.
-                </p>
-              </div>
-            </div>
-
-            <div className="mt-5 grid gap-3 sm:grid-cols-2">
-              {exercises.map((exercise) => {
-                const isSelected = formData.exerciseIds.includes(exercise.id);
-
-                return (
-                  <label
-                    key={exercise.id}
-                    className={`cursor-pointer rounded-[24px] border px-4 py-4 transition ${
-                      isSelected
-                        ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-500/10"
-                        : "border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-white dark:border-slate-800 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:bg-slate-900"
-                    }`}
+            <div
+              role="group"
+              aria-labelledby="workout-exercises-heading"
+              aria-describedby={exerciseSelectionDescriptionId}
+            >
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h2
+                    id="workout-exercises-heading"
+                    className="font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white"
                   >
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleExerciseSelection(exercise.id)}
-                        className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-700 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900"
-                      />
-                      <span>
-                        <span className="block font-semibold text-slate-950 dark:text-white">
-                          {exercise.name}
-                        </span>
-                        <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
-                          {exercise.category} • {exercise.equipment}
-                        </span>
-                      </span>
-                    </div>
-                  </label>
-                );
-              })}
-            </div>
+                    Select exercises
+                  </h2>
+                  <p
+                    id="workout-exercises-help"
+                    className="mt-1 text-sm text-slate-600 dark:text-slate-300"
+                  >
+                    Choose at least one movement to include in the session.
+                  </p>
+                </div>
+              </div>
 
-            {errors.exerciseIds && (
-              <p className="mt-3 text-sm text-rose-600 dark:text-rose-400">
-                {errors.exerciseIds}
-              </p>
-            )}
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                {exercises.map((exercise) => {
+                  const isSelected = formData.exerciseIds.includes(exercise.id);
+
+                  return (
+                    <label
+                      key={exercise.id}
+                      className={`cursor-pointer rounded-[24px] border px-4 py-4 transition ${
+                        isSelected
+                          ? "border-indigo-500 bg-indigo-50 dark:border-indigo-400 dark:bg-indigo-500/10"
+                          : "border-slate-200 bg-slate-50 hover:border-indigo-300 hover:bg-white dark:border-slate-800 dark:bg-slate-950 dark:hover:border-indigo-500 dark:hover:bg-slate-900"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleExerciseSelection(exercise.id)}
+                          className="mt-1 h-4 w-4 rounded border-slate-300 text-indigo-700 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900"
+                        />
+                        <span>
+                          <span className="block font-semibold text-slate-950 dark:text-white">
+                            {exercise.name}
+                          </span>
+                          <span className="mt-1 block text-sm text-slate-600 dark:text-slate-300">
+                            {exercise.category} • {exercise.equipment}
+                          </span>
+                        </span>
+                      </div>
+                    </label>
+                  );
+                })}
+              </div>
+
+              {errors.exerciseIds && (
+                <p
+                  id="workout-exercises-error"
+                  className="mt-3 text-sm text-rose-600 dark:text-rose-400"
+                >
+                  {errors.exerciseIds}
+                </p>
+              )}
+            </div>
           </div>
 
           <button

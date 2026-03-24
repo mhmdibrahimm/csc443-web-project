@@ -17,6 +17,7 @@ export default function WorkoutDetails() {
   const { id } = useParams();
   const { findWorkoutById } = useAppData();
   const [showNotes, setShowNotes] = useState(true);
+  const notesSectionId = "workout-notes-panel";
 
   const workout = findWorkoutById(id);
 
@@ -51,6 +52,8 @@ export default function WorkoutDetails() {
             <button
               type="button"
               onClick={() => setShowNotes((current) => !current)}
+              aria-controls={notesSectionId}
+              aria-expanded={showNotes}
               className="rounded-full border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-indigo-300 hover:text-indigo-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-indigo-500 dark:hover:text-indigo-300"
             >
               {showNotes ? "Hide notes" : "Show notes"}
@@ -104,6 +107,9 @@ export default function WorkoutDetails() {
             <button
               type="button"
               onClick={() => setShowNotes((current) => !current)}
+              aria-controls={notesSectionId}
+              aria-expanded={showNotes}
+              aria-label={showNotes ? "Hide session notes" : "Show session notes"}
               className="text-sm font-semibold text-indigo-700 transition hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-200"
             >
               {showNotes ? "Hide" : "Show"}
@@ -111,11 +117,17 @@ export default function WorkoutDetails() {
           </div>
 
           {showNotes ? (
-            <p className="mt-6 rounded-[28px] bg-slate-50 p-5 text-sm leading-7 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+            <p
+              id={notesSectionId}
+              className="mt-6 rounded-[28px] bg-slate-50 p-5 text-sm leading-7 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+            >
               {workout.notes || "No notes were captured for this workout."}
             </p>
           ) : (
-            <p className="mt-6 rounded-[28px] bg-slate-50 p-5 text-sm leading-7 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+            <p
+              id={notesSectionId}
+              className="mt-6 rounded-[28px] bg-slate-50 p-5 text-sm leading-7 text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+            >
               Notes are currently hidden. Use the toggle to reveal them again.
             </p>
           )}
