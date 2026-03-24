@@ -99,6 +99,18 @@ Personal Fitness Tracker
 - Log New Workout
 - User Progress
 
+## Velo Kinetic - Design System
+<div align="center">
+  <img src="src/assets/velo-kinetic-ds-figma-export.svg">
+</div>
+
+- Uses `Plus Jakarta Sans` for headings and `Inter` for body text and UI labels.
+- Uses indigo as the main brand color, slate tones for surfaces and text, and emerald for success/progress highlights.
+- Uses rounded cards, soft shadows, and consistent spacing to keep the interface clean and modern.
+- Reuses shared components such as the navbar, footer, page headers, stat cards, workout cards, search bars, and form controls.
+- Supports both light mode and dark mode with consistent colors, contrast, and interaction states.
+- Keeps the overall style sporty, minimal, and easy to navigate across all pages.
+
 ## Deployed Application
 - https://mhmdibrahimm.github.io/csc443-web-project/
 
