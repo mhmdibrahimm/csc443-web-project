@@ -27,6 +27,10 @@ const features = [
   }
 ];
 
+/**
+ * Public landing page: hero, value props, and (when signed in) a quick
+ * glance at the user's most recent training sessions.
+ */
 export default function HomePage() {
   const { currentUser, recentWorkouts } = useAppData();
 

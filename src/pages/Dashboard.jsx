@@ -4,6 +4,10 @@ import StatCard from "../components/StatCard";
 import WorkoutCard from "../components/WorkoutCard";
 import { useAppData } from "../context/AppDataContext";
 
+/**
+ * Authenticated landing page: greets the user, surfaces aggregate stats,
+ * recent workouts, and quick links to the most-used flows.
+ */
 export default function Dashboard() {
   const { currentUser, exercises, progressRecords, recentWorkouts, summary } =
     useAppData();

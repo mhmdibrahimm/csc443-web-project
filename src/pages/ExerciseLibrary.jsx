@@ -17,6 +17,11 @@ function getButtonClasses(isActive) {
   ].join(" ");
 }
 
+/**
+ * Searchable exercise catalog. The search term is debounced via
+ * `useDeferredValue` so heavy filters don't block keystrokes; pair that with
+ * the category and difficulty pill filters for narrowing the list.
+ */
 export default function ExerciseLibrary() {
   const { exercises } = useAppData();
   const [searchTerm, setSearchTerm] = useState("");

@@ -20,6 +20,11 @@ function validate(formData) {
   return nextErrors;
 }
 
+/**
+ * Sign-in form. On success, bounces the user back to the page they were
+ * trying to reach (passed via `location.state.from` by RequireAuth) or to
+ * /dashboard as a fallback.
+ */
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();

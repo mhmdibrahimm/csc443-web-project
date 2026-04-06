@@ -2,6 +2,11 @@ import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
 import { useAppData } from "../context/AppDataContext";
 
+/**
+ * Weekly progress summary: per-week consistency bars, focus distribution,
+ * and aggregate volume. Reads from `progressRecords` and derives focus
+ * counts from the workout list.
+ */
 export default function UserProgress() {
   const { currentUser, progressRecords, summary, workouts } = useAppData();
 

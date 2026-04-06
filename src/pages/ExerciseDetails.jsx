@@ -3,6 +3,11 @@ import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import { useAppData } from "../context/AppDataContext";
 
+/**
+ * Detail view for a single exercise. Looks up the exercise by URL param,
+ * exposes a collapsible instructions panel, and surfaces related exercises
+ * sharing the same category.
+ */
 export default function ExerciseDetails() {
   const { id } = useParams();
   const { exercises, findExerciseById } = useAppData();

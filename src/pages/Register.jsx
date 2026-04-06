@@ -56,6 +56,11 @@ function validate(formData) {
   return nextErrors;
 }
 
+/**
+ * Account-creation form. Phase 2 will replace `registerUser` with a
+ * POST /api/auth/register call; the validator already mirrors the
+ * server-side rules so the client and API agree.
+ */
 export default function Register() {
   const navigate = useNavigate();
   const { registerUser } = useAppData();

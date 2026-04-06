@@ -34,6 +34,11 @@ function validate(formData) {
   return nextErrors;
 }
 
+/**
+ * "New workout" form. Includes inline validation and a live summary panel
+ * that mirrors the form state. Protected by RequireAuth so guests can't
+ * submit; the context guard inside `addWorkout` is a defensive backstop.
+ */
 export default function LogWorkout() {
   const navigate = useNavigate();
   const { addWorkout, exercises } = useAppData();

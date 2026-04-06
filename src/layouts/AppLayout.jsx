@@ -60,6 +60,11 @@ function getLinkClasses({ isActive }) {
   ].join(" ");
 }
 
+/**
+ * Layout shell for authenticated routes. Provides the desktop sidebar and
+ * a slide-out mobile menu. The mobile menu intentionally exposes a "Back to
+ * landing page" link so users on small screens can escape the app shell.
+ */
 export default function AppLayout() {
   const location = useLocation();
   const { currentUser } = useAppData();

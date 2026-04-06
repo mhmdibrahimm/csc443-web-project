@@ -417,6 +417,14 @@ const initialProgressRecords = [
 
 const AppDataContext = createContext(null);
 
+/**
+ * App-wide data store. Today this owns mock users/workouts/exercises in
+ * local React state; in phase 2 these will be replaced by API-backed
+ * loaders while preserving the same hook surface (`useAppData`).
+ *
+ * Auth model: `currentUser` is `null` until a successful `signIn`. Routes
+ * that require authentication should be wrapped in <RequireAuth/>.
+ */
 export function AppDataProvider({ children }) {
   const [users, setUsers] = useState(initialUsers);
   const [workouts, setWorkouts] = useState(initialWorkouts);

@@ -13,6 +13,11 @@ function formatDate(date) {
   });
 }
 
+/**
+ * Detail view for a single logged workout: focus, intensity, duration, and
+ * the exercise-by-exercise breakdown. Notes panel is collapsible to keep the
+ * page scannable on mobile.
+ */
 export default function WorkoutDetails() {
   const { id } = useParams();
   const { findWorkoutById } = useAppData();
