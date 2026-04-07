@@ -1,5 +1,7 @@
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 import { useAppData } from "../context/AppDataContext";
 
 /**
@@ -8,7 +10,17 @@ import { useAppData } from "../context/AppDataContext";
  * counts from the workout list.
  */
 export default function UserProgress() {
-  const { currentUser, progressRecords, summary, workouts } = useAppData();
+  const {
+    currentUser, progressRecords, summary, workouts,
+    isDataLoading, dataError, reloadData,
+  } = useAppData();
+
+  if (isDataLoading && progressRecords.length === 0) {
+    return <LoadingSpinner label="Loading progress..." />;
+  }
+  if (dataError && progressRecords.length === 0) {
+    return <ErrorMessage error={dataError} onRetry={reloadData} />;
+  }
 
   const strengthSessions = workouts.filter(
     (workout) => workout.focus === "Strength",

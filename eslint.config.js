@@ -5,9 +5,10 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'server/node_modules']),
   {
-    files: ['**/*.{js,jsx}'],
+    // Frontend (browser) source.
+    files: ['src/**/*.{js,jsx}'],
     extends: [
       js.configs.recommended,
       reactHooks.configs.flat.recommended,
@@ -24,6 +25,24 @@ export default defineConfig([
     },
     rules: {
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+      // Setting state inside an effect is the textbook way to bridge external
+      // systems (data fetches, subscriptions) into React state. The newer
+      // hook rule flags every instance regardless — disable to keep our
+      // standard fetch-on-mount pattern legal.
+      'react-hooks/set-state-in-effect': 'off',
+    },
+  },
+  {
+    // Backend (Node) source — runs in Node, not in the browser.
+    files: ['server/**/*.js', 'scripts/**/*.js'],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: { ...globals.node },
+    },
+    rules: {
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     },
   },
 ])

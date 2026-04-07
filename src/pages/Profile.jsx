@@ -27,15 +27,25 @@ export default function Profile() {
     preferredWorkoutLength: currentUser?.preferredWorkoutLength ?? 45,
   });
   const [savedAt, setSavedAt] = useState(null);
+  const [submitError, setSubmitError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    updateProfile(formData);
+    setSubmitError("");
+    setIsSaving(true);
+    const result = await updateProfile(formData);
+    setIsSaving(false);
+
+    if (!result?.success) {
+      setSubmitError(result?.error || "Could not save changes. Try again.");
+      return;
+    }
     setSavedAt(new Date().toLocaleTimeString());
   }
 
@@ -204,12 +214,21 @@ export default function Profile() {
               Profile saved at {savedAt}.
             </p>
           )}
+          {submitError && (
+            <p
+              role="alert"
+              className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+            >
+              {submitError}
+            </p>
+          )}
 
           <button
             type="submit"
-            className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+            disabled={isSaving}
+            className="mt-6 w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90 disabled:opacity-60"
           >
-            Save changes
+            {isSaving ? "Saving..." : "Save changes"}
           </button>
         </form>
       </div>

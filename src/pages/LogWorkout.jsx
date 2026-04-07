@@ -52,6 +52,8 @@ export default function LogWorkout() {
     exerciseIds: [],
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const exerciseSelectionDescriptionId = errors.exerciseIds
     ? "workout-exercises-error"
     : "workout-exercises-help";
@@ -79,8 +81,9 @@ export default function LogWorkout() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setSubmitError("");
     const nextErrors = validate(formData);
     setErrors(nextErrors);
 
@@ -88,8 +91,16 @@ export default function LogWorkout() {
       return;
     }
 
-    const newWorkout = addWorkout(formData);
-    navigate(`/workouts/${newWorkout.id}`);
+    setIsSubmitting(true);
+    const result = await addWorkout(formData);
+    setIsSubmitting(false);
+
+    if (!result?.success) {
+      setSubmitError(result?.error || "Could not save workout. Please try again.");
+      return;
+    }
+
+    navigate(`/workouts/${result.workout.id}`);
   }
 
   return (
@@ -323,11 +334,21 @@ export default function LogWorkout() {
             </div>
           </div>
 
+          {submitError && (
+            <p
+              role="alert"
+              className="mt-6 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+            >
+              {submitError}
+            </p>
+          )}
+
           <button
             type="submit"
-            className="mt-8 w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+            disabled={isSubmitting}
+            className="mt-8 w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90 disabled:opacity-60"
           >
-            Save workout
+            {isSubmitting ? "Saving..." : "Save workout"}
           </button>
         </form>
 

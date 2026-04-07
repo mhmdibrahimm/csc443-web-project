@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 import { useAppData } from "../context/AppDataContext";
 
 /**
@@ -10,9 +12,18 @@ import { useAppData } from "../context/AppDataContext";
  */
 export default function ExerciseDetails() {
   const { id } = useParams();
-  const { exercises, findExerciseById } = useAppData();
+  const { exercises, findExerciseById, isDataLoading, dataError, reloadData } = useAppData();
   const [showInstructions, setShowInstructions] = useState(true);
   const instructionsSectionId = "exercise-instructions-panel";
+
+  // Catalog loads in parallel with the rest of user-scoped data on auth.
+  // Show a spinner until it's available, then look the exercise up.
+  if (isDataLoading && exercises.length === 0) {
+    return <LoadingSpinner label="Loading exercise..." />;
+  }
+  if (dataError && exercises.length === 0) {
+    return <ErrorMessage error={dataError} onRetry={reloadData} />;
+  }
 
   const exercise = findExerciseById(id);
   const relatedExercises = exercises

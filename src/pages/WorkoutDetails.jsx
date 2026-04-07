@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 import { useAppData } from "../context/AppDataContext";
 
 function formatDate(date) {
@@ -20,12 +22,50 @@ function formatDate(date) {
  */
 export default function WorkoutDetails() {
   const { id } = useParams();
-  const { findWorkoutById } = useAppData();
+  const { fetchWorkoutById } = useAppData();
+  const [workout, setWorkout] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showNotes, setShowNotes] = useState(true);
   const notesSectionId = "workout-notes-panel";
 
-  const workout = findWorkoutById(id);
+  const loadWorkout = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await fetchWorkoutById(id);
+      setWorkout(data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchWorkoutById, id]);
 
+  useEffect(() => {
+    let active = true;
+    async function load() {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchWorkoutById(id);
+        if (active) setWorkout(data);
+      } catch (err) {
+        if (active) setError(err);
+      } finally {
+        if (active) setIsLoading(false);
+      }
+    }
+    load();
+    return () => { active = false; };
+  }, [fetchWorkoutById, id]);
+
+  if (isLoading) {
+    return <LoadingSpinner label="Loading workout..." />;
+  }
+  if (error) {
+    return <ErrorMessage error={error} onRetry={loadWorkout} />;
+  }
   if (!workout) {
     return (
       <section className="rounded-[32px] border border-dashed border-slate-300 bg-white p-10 text-center shadow-sm dark:border-slate-700 dark:bg-slate-900">

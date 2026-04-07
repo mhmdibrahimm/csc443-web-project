@@ -2,15 +2,30 @@ import { Link } from "react-router-dom";
 import PageHeader from "../components/PageHeader";
 import StatCard from "../components/StatCard";
 import WorkoutCard from "../components/WorkoutCard";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 import { useAppData } from "../context/AppDataContext";
+
+function workoutsAreEmpty(list) {
+  return !list || list.length === 0;
+}
 
 /**
  * Authenticated landing page: greets the user, surfaces aggregate stats,
  * recent workouts, and quick links to the most-used flows.
  */
 export default function Dashboard() {
-  const { currentUser, exercises, progressRecords, recentWorkouts, summary } =
-    useAppData();
+  const {
+    currentUser, exercises, progressRecords, recentWorkouts, summary,
+    isDataLoading, dataError, reloadData,
+  } = useAppData();
+
+  if (isDataLoading && workoutsAreEmpty(recentWorkouts) && exercises.length === 0) {
+    return <LoadingSpinner label="Loading your dashboard..." />;
+  }
+  if (dataError && recentWorkouts.length === 0 && exercises.length === 0) {
+    return <ErrorMessage error={dataError} onRetry={reloadData} />;
+  }
 
   return (
     <div className="space-y-8">

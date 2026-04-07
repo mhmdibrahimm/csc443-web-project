@@ -72,6 +72,8 @@ export default function Register() {
     fitnessGoal: "",
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -81,8 +83,9 @@ export default function Register() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
+    setSubmitError("");
     const nextErrors = validate(formData);
     setErrors(nextErrors);
 
@@ -90,7 +93,15 @@ export default function Register() {
       return;
     }
 
-    registerUser(formData);
+    setIsSubmitting(true);
+    const result = await registerUser(formData);
+    setIsSubmitting(false);
+
+    if (!result?.success) {
+      setSubmitError(result?.error || "Registration failed. Please try again.");
+      return;
+    }
+
     navigate("/dashboard");
   }
 
@@ -295,11 +306,21 @@ export default function Register() {
               </div>
             </div>
 
+            {submitError && (
+              <p
+                role="alert"
+                className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+              >
+                {submitError}
+              </p>
+            )}
+
             <button
               type="submit"
-              className="w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+              disabled={isSubmitting}
+              className="w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90 disabled:opacity-60"
             >
-              Create account
+              {isSubmitting ? "Creating account..." : "Create account"}
             </button>
           </form>
 

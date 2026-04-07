@@ -31,12 +31,13 @@ export default function Login() {
   const { signIn } = useAppData();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "sara.chen@personalfit.app",
-    password: "fit1234",
+    email: "",
+    password: "",
     rememberMe: true,
   });
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -46,7 +47,7 @@ export default function Login() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setSubmitError("");
     const nextErrors = validate(formData);
@@ -56,7 +57,10 @@ export default function Login() {
       return;
     }
 
-    const result = signIn(formData);
+    setIsSubmitting(true);
+    const result = await signIn(formData);
+    setIsSubmitting(false);
+
     if (!result?.success) {
       setSubmitError(result?.error || "Sign-in failed. Please try again.");
       return;
@@ -85,14 +89,18 @@ export default function Login() {
 
           <div className="mt-8 rounded-[28px] bg-white/5 p-6">
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-400">
-              Sign-in credentials
+              First time here?
             </p>
             <p className="mt-3 text-sm text-slate-200">
-              Email: <span className="font-semibold">sara.chen@personalfit.app</span>
+              Create an account to start tracking your sessions, browse the
+              exercise library, and watch your weekly consistency build.
             </p>
-            <p className="mt-1 text-sm text-slate-200">
-              Password: <span className="font-semibold">fit1234</span>
-            </p>
+            <Link
+              to="/register"
+              className="mt-4 inline-flex rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/20"
+            >
+              Create your account
+            </Link>
           </div>
         </div>
 
@@ -203,9 +211,10 @@ export default function Login() {
 
             <button
               type="submit"
-              className="w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90"
+              disabled={isSubmitting}
+              className="w-full rounded-2xl bg-gradient-to-r from-indigo-700 to-indigo-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-500/20 transition hover:opacity-90 disabled:opacity-60"
             >
-              Login to dashboard
+              {isSubmitting ? "Signing in..." : "Login to dashboard"}
             </button>
           </form>
 

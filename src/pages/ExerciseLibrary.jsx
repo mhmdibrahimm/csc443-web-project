@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import ExerciseCard from "../components/ExerciseCard";
 import PageHeader from "../components/PageHeader";
 import SearchBar from "../components/SearchBar";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 import { useAppData } from "../context/AppDataContext";
 
 const categoryFilters = ["All", "Strength", "Cardio", "Core", "Mobility"];
@@ -23,7 +25,7 @@ function getButtonClasses(isActive) {
  * the category and difficulty pill filters for narrowing the list.
  */
 export default function ExerciseLibrary() {
-  const { exercises } = useAppData();
+  const { exercises, isDataLoading, dataError, reloadData } = useAppData();
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
@@ -48,6 +50,13 @@ export default function ExerciseLibrary() {
       return matchesSearch && matchesCategory && matchesDifficulty;
     });
   }, [categoryFilter, deferredSearchTerm, difficultyFilter, exercises]);
+
+  if (isDataLoading && exercises.length === 0) {
+    return <LoadingSpinner label="Loading exercise library..." />;
+  }
+  if (dataError && exercises.length === 0) {
+    return <ErrorMessage error={dataError} onRetry={reloadData} />;
+  }
 
   return (
     <div className="space-y-8">
