@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import BrandMark from "../components/BrandMark";
 import ThemeToggle from "../components/ThemeToggle";
 import { useAppData } from "../context/AppDataContext";
@@ -60,6 +60,38 @@ function getLinkClasses({ isActive }) {
   ].join(" ");
 }
 
+function SignOutIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.8"
+      viewBox="0 0 24 24"
+    >
+      <path d="M10 6.75V5.5A2.5 2.5 0 0 1 12.5 3h4A2.5 2.5 0 0 1 19 5.5v13a2.5 2.5 0 0 1-2.5 2.5h-4A2.5 2.5 0 0 1 10 18.5v-1.25" />
+      <path d="M4 12h10M7.5 8.5 4 12l3.5 3.5" />
+    </svg>
+  );
+}
+
+function SignOutButton({ onSignOut }) {
+  return (
+    <button
+      type="button"
+      onClick={onSignOut}
+      className="inline-flex items-center gap-2 rounded-full border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 shadow-sm transition hover:border-rose-300 hover:bg-rose-100 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300 dark:hover:border-rose-400/50 dark:hover:bg-rose-500/20"
+      aria-label="Sign out of your account"
+    >
+      <SignOutIcon />
+      <span>Sign out</span>
+    </button>
+  );
+}
+
 /**
  * Layout shell for authenticated routes. Provides the desktop sidebar and
  * a slide-out mobile menu. The mobile menu intentionally exposes a "Back to
@@ -67,7 +99,8 @@ function getLinkClasses({ isActive }) {
  */
 export default function AppLayout() {
   const location = useLocation();
-  const { currentUser } = useAppData();
+  const navigate = useNavigate();
+  const { currentUser, signOut } = useAppData();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const currentTitle =
@@ -80,6 +113,12 @@ export default function AppLayout() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
+
+  function handleSignOut() {
+    signOut();
+    setIsMobileMenuOpen(false);
+    navigate("/", { replace: true });
+  }
 
   return (
     <div className="min-h-screen bg-transparent">
@@ -159,7 +198,10 @@ export default function AppLayout() {
               {currentUser?.streak} day streak
             </p>
           </Link>
-          <ThemeToggle />
+          <div className="flex flex-wrap gap-2">
+            <ThemeToggle />
+            <SignOutButton onSignOut={handleSignOut} />
+          </div>
         </div>
       </aside>
 
@@ -343,8 +385,9 @@ export default function AppLayout() {
                 <p className="inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
                   {currentUser?.streak} day streak
                 </p>
-                <div className="mt-5">
+                <div className="mt-5 flex flex-wrap gap-2">
                   <ThemeToggle />
+                  <SignOutButton onSignOut={handleSignOut} />
                 </div>
               </div>
             </aside>
