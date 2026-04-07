@@ -14,7 +14,7 @@ if (!process.env.DATABASE_URL) {
 // path of least friction for the team's local + free-tier deployments.
 export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
+  ssl: process.env.DATABASE_URL.includes("localhost") ? false : { rejectUnauthorized: false },
 });
 
 /** Convenience wrapper so callers don't have to manage clients for one-shots. */
