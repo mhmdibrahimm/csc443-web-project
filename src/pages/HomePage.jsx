@@ -2,62 +2,34 @@ import { Link } from "react-router-dom";
 import heroImage from "../assets/hero.png";
 import StatCard from "../components/StatCard";
 import WorkoutCard from "../components/WorkoutCard";
+import { useAppData } from "../context/AppDataContext";
 
+// Each feature gets its own short eyebrow label so the homepage doesn't
+// read "Feature / Feature / Feature" three times in a row.
 const features = [
   {
+    eyebrow: "Tracking",
     title: "Track workouts with structure",
     description:
       "Log exercises, duration, intensity, and notes in a clean, consistent workflow."
   },
   {
+    eyebrow: "Library",
     title: "Browse a realistic exercise library",
     description:
       "Search by movement, muscle group, and equipment to quickly find the right exercises for your training plan."
   },
   {
+    eyebrow: "Insights",
     title: "See progress clearly",
     description:
       "Use dashboard summaries and progress records to understand consistency, minutes trained, and recent momentum."
   }
 ];
 
-const recentWorkouts = [
-  {
-    id: "home-workout-1",
-    focus: "Upper Body",
-    title: "Push Strength Session",
-    intensity: "Moderate",
-    date: "2026-03-17",
-    durationMinutes: 55,
-    entries: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
-    notes:
-      "Bench press, incline dumbbell press, overhead press, and triceps finishers with controlled tempo."
-  },
-  {
-    id: "home-workout-2",
-    focus: "Cardio",
-    title: "Interval Conditioning",
-    intensity: "High",
-    date: "2026-03-15",
-    durationMinutes: 35,
-    entries: [{ id: 1 }, { id: 2 }, { id: 3 }],
-    notes:
-      "Treadmill intervals alternating sprint and recovery with a short cooldown walk."
-  },
-  {
-    id: "home-workout-3",
-    focus: "Lower Body",
-    title: "Leg Day Volume",
-    intensity: "Moderate",
-    date: "2026-03-13",
-    durationMinutes: 60,
-    entries: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
-    notes:
-      "Back squats, Romanian deadlifts, split squats, leg press, and calf raises with progressive overload."
-  }
-];
-
 export default function HomePage() {
+  const { currentUser, recentWorkouts } = useAppData();
+
   return (
     <div className="pb-16">
       <section className="mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-24">
@@ -155,7 +127,7 @@ export default function HomePage() {
                 className="rounded-[28px] bg-slate-50 p-6 dark:bg-slate-800"
               >
                 <p className="text-xs font-bold uppercase tracking-[0.3em] text-indigo-700 dark:text-indigo-300">
-                  Feature
+                  {feature.eyebrow}
                 </p>
                 <h2 className="mt-4 font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
                   {feature.title}
@@ -169,30 +141,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.3em] text-indigo-700 dark:text-indigo-300">
-              Recent training
-            </p>
-            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white">
-              Recent training sessions
-            </h2>
+      {currentUser && recentWorkouts.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.3em] text-indigo-700 dark:text-indigo-300">
+                Recent training
+              </p>
+              <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-slate-950 dark:text-white">
+                Recent training sessions
+              </h2>
+            </div>
+            <Link
+              to="/workouts/new"
+              className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 dark:bg-white dark:text-slate-950 dark:hover:bg-indigo-200"
+            >
+              Log a workout
+            </Link>
           </div>
-          <Link
-            to="/workouts/new"
-            className="rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-indigo-700 dark:bg-white dark:text-slate-950 dark:hover:bg-indigo-200"
-          >
-            Log a workout
-          </Link>
-        </div>
 
-        <div className="mt-8 grid gap-6 lg:grid-cols-3">
-          {recentWorkouts.slice(0, 3).map((workout) => (
-            <WorkoutCard key={workout.id} workout={workout} />
-          ))}
-        </div>
-      </section>
+          <div className="mt-8 grid gap-6 lg:grid-cols-3">
+            {recentWorkouts.slice(0, 3).map((workout) => (
+              <WorkoutCard key={workout.id} workout={workout} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
         <div className="rounded-[40px] bg-gradient-to-r from-slate-950 to-indigo-700 px-6 py-10 text-white sm:px-10">
