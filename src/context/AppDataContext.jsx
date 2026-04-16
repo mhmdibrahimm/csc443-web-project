@@ -421,23 +421,29 @@ export function AppDataProvider({ children }) {
   const [users, setUsers] = useState(initialUsers);
   const [workouts, setWorkouts] = useState(initialWorkouts);
   const [progressRecords, setProgressRecords] = useState(initialProgressRecords);
-  const [currentUserId, setCurrentUserId] = useState(initialUsers[0]?.id ?? null);
+  // Phase 2: start unauthenticated by default. Routes that require a user
+  // should be wrapped by <RequireAuth/> so guests can't access them.
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const currentUser =
-    users.find((user) => user.id === currentUserId) ?? initialUsers[0] ?? null;
+    users.find((user) => user.id === currentUserId) ?? null;
 
-  function signIn({ email }) {
+  function signIn({ email, password }) {
     const normalizedEmail = email.trim().toLowerCase();
-    const matchedUser =
-      users.find((user) => user.email.toLowerCase() === normalizedEmail) ??
-      users[0];
+    const matchedUser = users.find(
+      (user) => user.email.toLowerCase() === normalizedEmail,
+    );
+
+    if (!matchedUser || (password && matchedUser.password !== password)) {
+      return { success: false, error: "Invalid email or password." };
+    }
 
     setCurrentUserId(matchedUser.id);
+    return { success: true, user: matchedUser };
+  }
 
-    return {
-      success: true,
-      user: matchedUser,
-    };
+  function signOut() {
+    setCurrentUserId(null);
   }
 
   function registerUser(formData) {
@@ -462,6 +468,13 @@ export function AppDataProvider({ children }) {
   }
 
   function addWorkout(workoutData) {
+    // Defensive guard: never let an unauthenticated user mutate state.
+    // Routes are also wrapped by <RequireAuth/>, but this protects against
+    // direct calls (and matches the API contract phase 2 will enforce).
+    if (!currentUserId) {
+      return null;
+    }
+
     const selectedExercises = workoutData.exerciseIds
       .map((exerciseId) => exercises.find((exercise) => exercise.id === exerciseId))
       .filter(Boolean);
@@ -525,6 +538,25 @@ export function AppDataProvider({ children }) {
     return newWorkout;
   }
 
+  function updateProfile(updates) {
+    if (!currentUserId) return null;
+    const safeUpdates = {
+      name: updates.name?.trim(),
+      fitnessGoal: updates.fitnessGoal,
+      level: updates.level,
+      weeklyGoal: Number(updates.weeklyGoal) || undefined,
+      preferredWorkoutLength: Number(updates.preferredWorkoutLength) || undefined,
+    };
+    setUsers((prev) =>
+      prev.map((u) =>
+        u.id === currentUserId
+          ? { ...u, ...Object.fromEntries(Object.entries(safeUpdates).filter(([, v]) => v !== undefined)) }
+          : u,
+      ),
+    );
+    return users.find((u) => u.id === currentUserId);
+  }
+
   function findExerciseById(exerciseId) {
     return exercises.find((exercise) => exercise.id === exerciseId);
   }
@@ -560,7 +592,9 @@ export function AppDataProvider({ children }) {
     featuredExercises: exercises.slice(0, 4),
     recentWorkouts: workouts.slice(0, 4),
     signIn,
+    signOut,
     registerUser,
+    updateProfile,
     addWorkout,
     findExerciseById,
     findWorkoutById,

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppData } from "../context/AppDataContext";
 
 function validate(formData) {
@@ -22,6 +22,7 @@ function validate(formData) {
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { signIn } = useAppData();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -30,6 +31,7 @@ export default function Login() {
     rememberMe: true,
   });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState("");
 
   function handleChange(event) {
     const { name, value, type, checked } = event.target;
@@ -41,6 +43,7 @@ export default function Login() {
 
   function handleSubmit(event) {
     event.preventDefault();
+    setSubmitError("");
     const nextErrors = validate(formData);
     setErrors(nextErrors);
 
@@ -48,8 +51,16 @@ export default function Login() {
       return;
     }
 
-    signIn(formData);
-    navigate("/dashboard");
+    const result = signIn(formData);
+    if (!result?.success) {
+      setSubmitError(result?.error || "Sign-in failed. Please try again.");
+      return;
+    }
+
+    // Bounce back to wherever the guest was trying to reach, or fall through
+    // to the dashboard.
+    const destination = location.state?.from || "/dashboard";
+    navigate(destination, { replace: true });
   }
 
   return (
@@ -175,6 +186,15 @@ export default function Login() {
               />
               Keep me signed in on this device
             </label>
+
+            {submitError && (
+              <p
+                role="alert"
+                className="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-500/30 dark:bg-rose-500/10 dark:text-rose-300"
+              >
+                {submitError}
+              </p>
+            )}
 
             <button
               type="submit"

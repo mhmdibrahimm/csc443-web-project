@@ -1,5 +1,6 @@
 import { Link, Navigate, Route, Routes } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
+import RequireAuth from "../components/RequireAuth";
 import Dashboard from "../pages/Dashboard";
 import ExerciseDetails from "../pages/ExerciseDetails";
 import ExerciseLibrary from "../pages/ExerciseLibrary";
@@ -10,6 +11,7 @@ import PublicLayout from "../layouts/PublicLayout";
 import HomePage from "../pages/HomePage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import Profile from "../pages/Profile";
 
 function NotFoundPage() {
   return (
@@ -42,13 +44,16 @@ export default function AppRouter() {
         <Route path="/register" element={<Register />} />
       </Route>
 
-      <Route element={<AppLayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/exercises" element={<ExerciseLibrary />} />
-        <Route path="/exercises/:id" element={<ExerciseDetails />} />
-        <Route path="/workouts/new" element={<LogWorkout />} />
-        <Route path="/workouts/:id" element={<WorkoutDetails />} />
-        <Route path="/progress" element={<UserProgress />} />
+      <Route element={<RequireAuth />}>
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/exercises" element={<ExerciseLibrary />} />
+          <Route path="/exercises/:id" element={<ExerciseDetails />} />
+          <Route path="/workouts/new" element={<LogWorkout />} />
+          <Route path="/workouts/:id" element={<WorkoutDetails />} />
+          <Route path="/progress" element={<UserProgress />} />
+          <Route path="/profile" element={<Profile />} />
+        </Route>
       </Route>
 
       <Route path="/home" element={<Navigate replace to="/" />} />
