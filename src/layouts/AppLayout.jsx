@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import BrandMark from "../components/BrandMark";
 import ThemeToggle from "../components/ThemeToggle";
 import { useAppData } from "../context/AppDataContext";
@@ -78,7 +78,7 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-transparent">
-      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80 md:flex-col md:border-r md:border-slate-200/70 md:bg-white/90 md:px-6 md:py-6 md:backdrop-blur dark:md:border-slate-800 dark:md:bg-slate-950/85">
+      <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80 md:flex-col md:overflow-y-auto md:border-r md:border-slate-200/70 md:bg-white/90 md:px-6 md:py-6 md:backdrop-blur dark:md:border-slate-800 dark:md:bg-slate-950/85">
         <div className="rounded-[30px] border border-slate-200/70 bg-white/80 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
           <BrandMark />
           <p className="mt-6 text-xs font-bold uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
@@ -135,8 +135,12 @@ export default function AppLayout() {
           ))}
         </nav>
 
-        <div className="mt-auto space-y-4">
-          <div className="rounded-[30px] border border-slate-200/70 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="mt-auto space-y-4 pt-6">
+          <Link
+            to="/profile"
+            aria-label="Open your profile"
+            className="block rounded-[30px] border border-slate-200/70 bg-slate-50 p-5 transition hover:border-indigo-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:hover:border-indigo-500 dark:hover:bg-slate-800"
+          >
             <p className="text-xs font-bold uppercase tracking-[0.3em] text-slate-400 dark:text-slate-500">
               Active user
             </p>
@@ -149,7 +153,7 @@ export default function AppLayout() {
             <p className="mt-4 inline-flex rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300">
               {currentUser?.streak} day streak
             </p>
-          </div>
+          </Link>
           <ThemeToggle />
         </div>
       </aside>
@@ -217,7 +221,12 @@ export default function AppLayout() {
               className="fixed inset-y-0 left-0 z-40 flex w-[88vw] max-w-sm flex-col border-r border-slate-200/70 bg-white px-5 py-5 shadow-2xl dark:border-slate-800 dark:bg-slate-950"
             >
               <div className="flex items-start justify-between gap-4 rounded-[28px] border border-slate-200/70 bg-slate-50 p-5 dark:border-slate-800 dark:bg-slate-900">
-                <div>
+                <Link
+                  to="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Open your profile"
+                  className="-m-1 flex-1 rounded-2xl p-1 transition hover:bg-white/60 dark:hover:bg-slate-800/60"
+                >
                   <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500">
                     Active user
                   </p>
@@ -227,7 +236,7 @@ export default function AppLayout() {
                   <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                     Goal: {currentUser?.fitnessGoal}
                   </p>
-                </div>
+                </Link>
                 <button
                   type="button"
                   aria-label="Close mobile app menu"
@@ -250,6 +259,27 @@ export default function AppLayout() {
               </div>
 
               <nav aria-label="Mobile app navigation" className="mt-6 space-y-3">
+                <Link
+                  to="/"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-3 rounded-[24px] bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl border border-slate-200 bg-white text-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400">
+                    <svg
+                      aria-hidden="true"
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.8"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M3 11.5 12 4l9 7.5M5 10v10h14V10" />
+                    </svg>
+                  </span>
+                  Back to landing page
+                </Link>
                 {appLinks.map((link) => (
                   <NavLink
                     key={link.to}
