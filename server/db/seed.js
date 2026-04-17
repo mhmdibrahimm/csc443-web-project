@@ -1,0 +1,258 @@
+import { pool, query } from "./pool.js";
+
+// The catalog mirrors the phase-1 mock data so the frontend can be flipped
+// to live data without users noticing a change in available content.
+const exercises = [
+  {
+    id: "barbell-back-squat",
+    name: "Barbell Back Squat",
+    category: "Strength",
+    difficulty: "Advanced",
+    targetMuscles: ["Quadriceps", "Glutes", "Core"],
+    equipment: "Barbell",
+    defaultSets: 4,
+    repRange: "6-8",
+    durationMinutes: 18,
+    description:
+      "A foundational lower-body compound lift for building leg strength, trunk stability, and power production.",
+    coachingCues: [
+      "Brace before every rep and keep your ribs stacked over your hips.",
+      "Drive through the middle of your foot to stay balanced.",
+      "Maintain a steady bar path over your mid-foot.",
+    ],
+    instructions: [
+      "Set the bar across your upper back and grip it evenly.",
+      "Stand tall, inhale deeply, and unlock your hips and knees together.",
+      "Lower until your thighs reach depth while keeping your chest proud.",
+      "Push the floor away and stand up with control.",
+    ],
+  },
+  {
+    id: "incline-dumbbell-press",
+    name: "Incline Dumbbell Press",
+    category: "Strength",
+    difficulty: "Intermediate",
+    targetMuscles: ["Upper Chest", "Shoulders", "Triceps"],
+    equipment: "Dumbbells",
+    defaultSets: 3,
+    repRange: "8-10",
+    durationMinutes: 14,
+    description:
+      "Targets the upper chest while training pressing strength through a stable and joint-friendly range.",
+    coachingCues: [
+      "Set your shoulder blades before each set.",
+      "Press up and slightly in without bouncing the dumbbells.",
+      "Keep your wrists stacked over your elbows.",
+    ],
+    instructions: [
+      "Set a bench to a low incline and sit back with the dumbbells on your thighs.",
+      "Kick the weights into position over your chest.",
+      "Lower under control until your elbows pass slightly below the bench line.",
+      "Press back to the top without letting the shoulders roll forward.",
+    ],
+  },
+  {
+    id: "conventional-deadlift",
+    name: "Conventional Deadlift",
+    category: "Strength",
+    difficulty: "Advanced",
+    targetMuscles: ["Hamstrings", "Glutes", "Back"],
+    equipment: "Barbell",
+    defaultSets: 4,
+    repRange: "4-6",
+    durationMinutes: 18,
+    description:
+      "A full-body hinge pattern that builds posterior-chain strength and reinforces coordinated tension.",
+    coachingCues: [
+      "Pull the slack out of the bar before breaking the floor.",
+      "Keep the bar close to your legs throughout the lift.",
+      "Finish with glutes, not by leaning back.",
+    ],
+    instructions: [
+      "Stand with your mid-foot under the bar and hinge to grab it.",
+      "Set your back tight and push your chest long.",
+      "Drive your feet through the floor and stand tall.",
+      "Return the bar by pushing your hips back before bending the knees.",
+    ],
+  },
+  {
+    id: "seated-cable-row",
+    name: "Seated Cable Row",
+    category: "Strength",
+    difficulty: "Beginner",
+    targetMuscles: ["Mid Back", "Lats", "Biceps"],
+    equipment: "Cable Machine",
+    defaultSets: 3,
+    repRange: "10-12",
+    durationMinutes: 12,
+    description:
+      "A controlled rowing variation that develops upper-back strength and postural awareness.",
+    coachingCues: [
+      "Lead with your elbows instead of yanking with your hands.",
+      "Pause briefly at the torso to own the contraction.",
+      "Keep your chest tall and avoid excessive lean.",
+    ],
+    instructions: [
+      "Sit tall with a neutral spine and feet braced on the platform.",
+      "Grab the handle and extend your arms fully.",
+      "Row the handle toward your lower ribs while squeezing your shoulder blades.",
+      "Extend back out slowly without losing posture.",
+    ],
+  },
+  {
+    id: "treadmill-intervals",
+    name: "Treadmill Intervals",
+    category: "Cardio",
+    difficulty: "Intermediate",
+    targetMuscles: ["Cardiovascular System", "Calves", "Glutes"],
+    equipment: "Treadmill",
+    defaultSets: 6,
+    repRange: "45 sec hard / 75 sec easy",
+    durationMinutes: 24,
+    description:
+      "Alternating bursts of speed and recovery to improve conditioning without a long steady-state session.",
+    coachingCues: [
+      "Build speed smoothly rather than jumping to the final pace.",
+      "Keep your shoulders relaxed during hard rounds.",
+      "Use the recovery windows to fully reset your breathing.",
+    ],
+    instructions: [
+      "Warm up for five minutes at an easy pace.",
+      "Run hard for forty-five seconds.",
+      "Recover at a walk or gentle jog for seventy-five seconds.",
+      "Repeat for the planned number of rounds and cool down.",
+    ],
+  },
+  {
+    id: "kettlebell-swing",
+    name: "Kettlebell Swing",
+    category: "Cardio",
+    difficulty: "Intermediate",
+    targetMuscles: ["Glutes", "Hamstrings", "Shoulders"],
+    equipment: "Kettlebell",
+    defaultSets: 4,
+    repRange: "15 reps",
+    durationMinutes: 10,
+    description:
+      "An explosive hinge movement that trains hip snap, coordination, and conditioning at the same time.",
+    coachingCues: [
+      "Hinge, do not squat, on the backswing.",
+      "Let the bell float from the power of your hips.",
+      "Keep your neck neutral and ribs down.",
+    ],
+    instructions: [
+      "Set the kettlebell slightly in front of you and hike it back between your legs.",
+      "Snap your hips to project the bell to chest height.",
+      "Let the bell fall while staying tight through your trunk.",
+      "Repeat without lifting with your arms.",
+    ],
+  },
+  {
+    id: "plank-series",
+    name: "Plank Series",
+    category: "Core",
+    difficulty: "Beginner",
+    targetMuscles: ["Core", "Shoulders", "Glutes"],
+    equipment: "Mat",
+    defaultSets: 3,
+    repRange: "30-45 sec",
+    durationMinutes: 9,
+    description:
+      "A simple core block that builds anti-extension control and teaches total-body tension.",
+    coachingCues: [
+      "Push the floor away and spread your shoulder blades.",
+      "Squeeze your glutes to keep the pelvis from tipping forward.",
+      "Breathe quietly through your nose while staying braced.",
+    ],
+    instructions: [
+      "Set your elbows under your shoulders on the mat.",
+      "Lift your knees and create a straight line from shoulders to heels.",
+      "Hold tension through your midline for the target time.",
+      "Rest and repeat until all sets are complete.",
+    ],
+  },
+  {
+    id: "worlds-greatest-stretch",
+    name: "World's Greatest Stretch",
+    category: "Mobility",
+    difficulty: "Beginner",
+    targetMuscles: ["Hips", "Thoracic Spine", "Hamstrings"],
+    equipment: "Bodyweight",
+    defaultSets: 2,
+    repRange: "5 reps per side",
+    durationMinutes: 8,
+    description:
+      "A mobility sequence that opens the hips, thoracic spine, and posterior chain before training.",
+    coachingCues: [
+      "Move slowly and use your breath to guide each position.",
+      "Keep your front foot planted and stable.",
+      "Reach long through the upper body during the rotation.",
+    ],
+    instructions: [
+      "Start in a lunge position with both hands inside your front foot.",
+      "Drop your back knee if needed to keep control.",
+      "Rotate your chest toward the front knee and reach upward.",
+      "Return to the floor, switch sides, and repeat.",
+    ],
+  },
+  {
+    id: "walking-lunge",
+    name: "Walking Lunge",
+    category: "Strength",
+    difficulty: "Intermediate",
+    targetMuscles: ["Quadriceps", "Glutes", "Adductors"],
+    equipment: "Dumbbells",
+    defaultSets: 3,
+    repRange: "12 steps",
+    durationMinutes: 12,
+    description:
+      "A unilateral leg exercise that improves balance, control, and lower-body endurance.",
+    coachingCues: [
+      "Stay tall through your torso rather than pitching forward.",
+      "Lower under control and avoid slamming the back knee down.",
+      "Push strongly through the front heel to drive into the next step.",
+    ],
+    instructions: [
+      "Stand tall with dumbbells at your sides if loading the movement.",
+      "Step forward and lower into a controlled split squat.",
+      "Drive through the front foot and bring the back leg through.",
+      "Continue alternating steps for the target count.",
+    ],
+  },
+];
+
+const upsertSql = `
+  INSERT INTO exercises (
+    id, name, category, difficulty, target_muscles, equipment,
+    default_sets, rep_range, duration_minutes, description,
+    coaching_cues, instructions
+  ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+  ON CONFLICT (id) DO UPDATE SET
+    name             = EXCLUDED.name,
+    category         = EXCLUDED.category,
+    difficulty       = EXCLUDED.difficulty,
+    target_muscles   = EXCLUDED.target_muscles,
+    equipment        = EXCLUDED.equipment,
+    default_sets     = EXCLUDED.default_sets,
+    rep_range        = EXCLUDED.rep_range,
+    duration_minutes = EXCLUDED.duration_minutes,
+    description      = EXCLUDED.description,
+    coaching_cues    = EXCLUDED.coaching_cues,
+    instructions     = EXCLUDED.instructions
+`;
+
+try {
+  for (const ex of exercises) {
+    await query(upsertSql, [
+      ex.id, ex.name, ex.category, ex.difficulty, ex.targetMuscles, ex.equipment,
+      ex.defaultSets, ex.repRange, ex.durationMinutes, ex.description,
+      ex.coachingCues, ex.instructions,
+    ]);
+  }
+  console.log(`seeded ${exercises.length} exercises`);
+} catch (err) {
+  console.error("seed failed:", err.message);
+  process.exitCode = 1;
+} finally {
+  await pool.end();
+}
