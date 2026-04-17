@@ -9,6 +9,22 @@ const goalOptions = [
   "Stay Consistent",
 ];
 
+// Password rules — kept in one place so the live hint and the validator stay
+// in sync. Mirrors the rules the backend will enforce in phase 2.
+const passwordRules = [
+  { id: "length", label: "At least 8 characters", test: (p) => p.length >= 8 },
+  { id: "upper", label: "One uppercase letter", test: (p) => /[A-Z]/.test(p) },
+  { id: "lower", label: "One lowercase letter", test: (p) => /[a-z]/.test(p) },
+  { id: "number", label: "One number", test: (p) => /\d/.test(p) },
+];
+
+function getPasswordError(password) {
+  if (!password.trim()) return "Password is required.";
+  const failed = passwordRules.filter((rule) => !rule.test(password));
+  if (failed.length === 0) return null;
+  return `Password must include: ${failed.map((r) => r.label.toLowerCase()).join(", ")}.`;
+}
+
 function validate(formData) {
   const nextErrors = {};
 
@@ -22,10 +38,9 @@ function validate(formData) {
     nextErrors.email = "Enter a valid email address.";
   }
 
-  if (!formData.password.trim()) {
-    nextErrors.password = "Password is required.";
-  } else if (formData.password.length < 6) {
-    nextErrors.password = "Password must be at least 6 characters.";
+  const passwordError = getPasswordError(formData.password);
+  if (passwordError) {
+    nextErrors.password = passwordError;
   }
 
   if (!formData.confirmPassword.trim()) {
@@ -172,12 +187,31 @@ export default function Register() {
                   value={formData.password}
                   onChange={handleChange}
                   aria-invalid={Boolean(errors.password)}
-                  aria-describedby={
-                    errors.password ? "register-password-error" : undefined
-                  }
+                  aria-describedby="register-password-rules"
                   placeholder="Create a password"
                   className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none transition focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:focus:border-indigo-500 dark:focus:ring-indigo-500/10"
                 />
+                <ul
+                  id="register-password-rules"
+                  className="mt-2 space-y-1 text-xs"
+                >
+                  {passwordRules.map((rule) => {
+                    const passed = rule.test(formData.password);
+                    return (
+                      <li
+                        key={rule.id}
+                        className={
+                          passed
+                            ? "text-emerald-600 dark:text-emerald-400"
+                            : "text-slate-500 dark:text-slate-400"
+                        }
+                      >
+                        <span aria-hidden="true">{passed ? "✓" : "○"}</span>{" "}
+                        {rule.label}
+                      </li>
+                    );
+                  })}
+                </ul>
                 {errors.password && (
                   <p
                     id="register-password-error"
