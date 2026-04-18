@@ -4,7 +4,6 @@ import babel from '@rolldown/plugin-babel'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/csc443-web-project/',
   plugins: [
     react(),
     babel({ presets: [reactCompilerPreset()] })
