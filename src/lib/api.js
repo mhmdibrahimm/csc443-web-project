@@ -1,13 +1,14 @@
 /**
  * Thin fetch wrapper for the Velo API.
  *
- * - Reads the base URL from `VITE_API_URL` (defaults to localhost:3001 for dev).
+ * - Reads the base URL from `VITE_API_URL`; dev falls back to localhost,
+ *   while production falls back to same-origin Vercel API routes.
  * - Reads the JWT from localStorage and adds it as a Bearer token when present.
  * - Throws an `ApiError` with `.status` and the server-provided message on
  *   non-2xx responses, so callers can render friendly errors.
  */
 
-const BASE = import.meta.env.VITE_API_URL || "http://localhost:3001";
+const BASE = import.meta.env.VITE_API_URL ?? (import.meta.env.DEV ? "http://localhost:3001" : "");
 const TOKEN_KEY = "velo:auth-token";
 
 export class ApiError extends Error {

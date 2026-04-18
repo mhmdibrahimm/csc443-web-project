@@ -43,7 +43,7 @@
 </div>
 
 # Velo 2.0.0
-Velo is a responsive frontend web application developed for CSC443 Phase I. It allows users to register, log in, browse exercises, log workouts, view workout details, and track fitness progress using mock data and local React state (Phase I only).
+Velo is a responsive personal fitness tracker developed for CSC443. Phase 2 connects the React frontend to a Node/Express API backed by Supabase-hosted PostgreSQL.
 
 ## Team
 - [Mohammad Ibrahim](mailto:mohammad.ibrahim07@lau.edu) (Lead)
@@ -87,6 +87,10 @@ Personal Fitness Tracker
 - Tailwind CSS
 - JavaScript (ES6+)
 - Vite
+- Node.js / Express
+- Supabase PostgreSQL
+- JWT authentication with bcrypt password hashing
+- Vercel
 - Git & GitHub
 
 ## Pages
@@ -112,9 +116,7 @@ Personal Fitness Tracker
 - Keeps the overall style sporty, minimal, and easy to navigate across all pages.
 
 ## Deployed Application
-- https://mhmdibrahimm.github.io/csc443-web-project/
-
-- tutorial credits to [this repo](https://github.com/gitname/react-gh-pages)
+- Vercel production URL: pending manual deployment
 
 ## GitHub Repository
 https://github.com/mhmdibrahimm/csc443-web-project/
@@ -122,8 +124,55 @@ https://github.com/mhmdibrahimm/csc443-web-project/
 ## Local Setup
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
+
+In a second terminal:
+
+```bash
+cd server
+npm install
+cp .env.example .env
+npm run db:schema
+npm run db:seed
+npm run dev
+```
+
+Root `.env.local`:
+
+```env
+VITE_API_URL=http://localhost:3001
+```
+
+`server/.env`:
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRES_IN=7d
+PORT=3001
+CORS_ORIGIN=http://localhost:5173
+```
+
+## Vercel Deployment
+This repo is configured for one Vercel project:
+
+- Vite frontend builds to `dist`.
+- Express API is exposed through `api/index.js`.
+- `vercel.json` rewrites `/api/*` to the Express function and all other paths to the React app.
+
+Configure these Vercel environment variables before deploying:
+
+```env
+DATABASE_URL=postgresql://...
+JWT_SECRET=replace-with-a-long-random-secret
+JWT_EXPIRES_IN=7d
+CORS_ORIGIN=https://your-vercel-domain.vercel.app
+```
+
+`VITE_API_URL` is optional on Vercel because the frontend uses same-origin `/api` routes by default in production.
+
 ## React Compiler
 
 The React Compiler is enabled on this project. See [this documentation](https://react.dev/learn/react-compiler) for more information.
