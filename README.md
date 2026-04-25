@@ -47,30 +47,25 @@ Velo is a responsive personal fitness tracker developed for CSC443. Phase 2 conn
 
 ## Team
 - [Mohammad Ibrahim](mailto:mohammad.ibrahim07@lau.edu) (Lead)
-  - Set up the main project foundation with React, Vite, Tailwind CSS, and routing.
-  - Built shared UI components such as the navbar, footer, theme toggle, brand mark, and homepage components.
-  - Added global light/dark theme styling and deployment configuration.
-  - Updated branding assets and maintained the README and initial project documentation.
+  - Initialized the React/Vite project, Tailwind setup, routing foundation, and shared visual system.
+  - Built the public layout pieces including the navbar, footer, brand mark, theme toggle, homepage, stat cards, and workout cards.
+  - Added protected-route/profile flow support, maintained project documentation, and configured Vercel deployment.
+  - Implemented Phase 2 workout CRUD endpoints with ownership checks and the progress aggregation API.
 - [Batoul Zeineddine](mailto:batoul.zeineddine@lau.edu)
-  - Built the exercise library page.
-  - Built the exercise details page.
-  - Built the workout logging page.
-  - Built the workout details page.
-  - Added reusable components like the search bar and exercise card.
-  - Connected the related routes for workout and exercise features.
+  - Built the exercise library, exercise details, workout logging, workout details, and user progress pages.
+  - Added reusable exercise UI pieces such as the exercise card and search bar.
+  - Connected workout/exercise routes and improved app-shell navigation behavior.
+  - Scaffolded the Phase 2 Express server, environment templates, PostgreSQL pool/schema, auth middleware, error handling, and initial route stubs.
 - [Mahdi Yassine](mailto:mahdi.yassine01@lau.edu)
-  - Built the login page.
-  - Built the register page.
-  - Added user/account handling with AppDataContext.
-  - Improved accessibility across the app with ARIA labels and related fixes.
-  - Fixed dark mode form styling and input/select UI issues.
-  - Fixed navbar behavior on the register page.
-  - Updated the homepage hero image.
+  - Built the login/register experience and the original user/account handling through AppDataContext.
+  - Added stronger register password validation with live rules and improved auth form dark-mode behavior.
+  - Improved accessibility across the frontend with ARIA labels and related form fixes.
+  - Added Phase 2 user profile endpoints and exercise catalog endpoints with the database seed script.
 - [Khalil Hassan](mailto:khalil.hassan@lau.edu)
-  - Built the dashboard page.
-  - Added dashboard summary cards and recent workout content.
-  - Added the dashboard route.
-  - Added shared app page support such as the page header.
+  - Built the dashboard page, dashboard route, page header support, summary cards, and recent workout content.
+  - Added the authenticated app layout and sign-out action in the app shell.
+  - Implemented Phase 2 auth endpoints for registration/login with bcrypt and JWT.
+  - Added the frontend API wrapper, loading/error components, protected-page API integration, and controller-based backend refactor.
 
 ## Topic
 Personal Fitness Tracker
