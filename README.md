@@ -116,7 +116,7 @@ Personal Fitness Tracker
 - Keeps the overall style sporty, minimal, and easy to navigate across all pages.
 
 ## Deployed Application
-- Vercel production URL: pending manual deployment
+- Vercel production URL: https://csc443-web-project.vercel.app/
 
 ## GitHub Repository
 https://github.com/mhmdibrahimm/csc443-web-project/
