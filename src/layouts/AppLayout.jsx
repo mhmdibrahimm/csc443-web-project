@@ -6,6 +6,14 @@ import { useAppData } from "../context/AppDataContext";
 
 const appLinks = [
   {
+    to: "/home",
+    label: "Home",
+    description: "Main home page",
+    icon: (
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    ),
+  },
+  {
     to: "/dashboard",
     label: "Dashboard",
     description: "Overview and recent activity",
@@ -123,18 +131,8 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-transparent">
       <aside className="hidden md:fixed md:inset-y-0 md:left-0 md:flex md:w-80 md:flex-col md:overflow-y-auto md:border-r md:border-slate-200/70 md:bg-white/90 md:px-6 md:py-6 md:backdrop-blur dark:md:border-slate-800 dark:md:bg-slate-950/85">
-        <div className="rounded-[30px] border border-slate-200/70 bg-white/80 p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/80">
-          <BrandMark />
-          <p className="mt-6 text-xs font-bold uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500">
-            App navigation
-          </p>
-          <h2 className="mt-2 font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
-            Training space
-          </h2>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
-            Move between your dashboard, workouts, and progress without losing context.
-          </p>
-        </div>
+                <BrandMark />
+
 
         <nav aria-label="App navigation" className="mt-6 space-y-2">
           {appLinks.map((link) => (

@@ -83,7 +83,7 @@ export default function Login() {
             Continue where your last session left off.
           </h1>
           <p className="mt-4 text-base leading-7 text-slate-300">
-            Use the credentials below to sign in quickly and continue your
+            Sign in quickly and continue your
             training journey.
           </p>
 
@@ -219,7 +219,7 @@ export default function Login() {
           </form>
 
           <p className="mt-6 text-sm text-slate-600 dark:text-slate-300">
-            New to the project?{" "}
+            New here?{" "}
             <Link
               to="/register"
               className="font-semibold text-indigo-700 transition hover:text-indigo-600 dark:text-indigo-300 dark:hover:text-indigo-200"
