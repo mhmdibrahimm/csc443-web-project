@@ -121,6 +121,9 @@ Personal Fitness Tracker
 ## GitHub Repository
 https://github.com/mhmdibrahimm/csc443-web-project/
 
+## API Documentation
+Full backend endpoint documentation is available in [APIDOC.md](APIDOC.md).
+
 ## Local Setup
 ```bash
 npm install
